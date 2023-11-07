@@ -1,11 +1,11 @@
 openapi: 3.0.3
 info:
   title: Library API
-  version: 1.0.0
-  description: STD22092
+  version: 1.0.0  
+  description: STD22092  
 servers:
   - url: https://library.com
-paths:
+  paths:
   /books:
     get:
       summary: Get all books
@@ -20,18 +20,32 @@ paths:
             type: string
         - in: query
           name: releaseDateStart
-          description: Filter books by a start date for releaseDate 
+          description: Filter books by a start date for releaseDate
           required: false
           schema:
             type: string
             format: date
         - in: query
           name: releaseDateEnd
-          description: Filter books by an end date for releaseDate 
+          description: Filter books by an end date for releaseDate
           required: false
           schema:
             type: string
             format: date
+        - in: query
+          name: page
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: pageSize
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            default: 50
       responses:
         200:
           description: The list of filtered books
@@ -50,7 +64,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Book'
+                $ref: '#/components/schemas/CrupdateBook'
       responses:
         200:
           description: The list of created or updated books
@@ -60,89 +74,43 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Book'
-  /authors:
-    get:
-      summary: Get all authors
-      description: Get a list of all authors.
-      operationId: getAuthors
+  /books/{bookId}/authors/{authorId}:
+    put:
+      summary: Attach an Author to a Book
+      description: Attach an Author to a Book by specifying their IDs.
+      operationId: attachAuthorToBook
       parameters:
-        - in: query
-          name: authorName
-          description: Filter authors by name 
-          required: false
+        - in: path
+          name: bookId
+          description: ID of the book
+          required: true
           schema:
             type: string
-      responses:
-        200:
-          description: The list of authors
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Author'
+        - in: path
+          name: authorId
+          description: ID of the author
+          required: true
+          schema:
+            type: string
+  /books/authors:
     put:
-      summary: Create or update authors
-      operationId: crupdateAuthors
+      summary: Attach Authors to Books
+      description: Attach multiple Authors to multiple Books by specifying their IDs.
+      operationId: attachAuthorsToBooks
       requestBody:
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Author'
+                $ref: '#/components/schemas/UpdateBookAuthor'
       responses:
         200:
-          description: The list of created or updated authors
+          description: The updated books with attached authors
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Author'
-    delete:
-      summary: Delete an author
-      description: Delete an author by ID.
-      operationId: deleteAuthor
-      parameters:
-        - in: path
-          name: authorId
-          description: ID of the author to delete
-          required: true
-          schema:
-            type: string
-components:
-  schemas:
-    Book:
-      type: object
-      properties:
-        id:
-          type: string
-        bookName:
-          type: string
-        author:
-          $ref: '#/components/schemas/Author'  
-        pageNumbers:
-          type: integer
-        topic:
-          type: string
-          enum:
-            - ROMANCE
-            - COMEDY
-            - OTHER
-        releaseDate:
-          type: string
-          format: date
+                  $ref: '#/components/schemas/Book'
 
-    Author:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        sex:
-          type: string
-          enum:
-            - M
-            - F
