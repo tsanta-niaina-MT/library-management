@@ -17,39 +17,34 @@ paths:
         - in: query
           name: bookName
           description: Filter return books by given name
-          required: false
           schema:
             type: string
         - in: query
           name: releaseDateStart
           description: Filter books released after this date
-          required: false
           schema:
             type: string
             format: date
         - in: query
           name: releaseDateEnd
           description: Filter books released before this date
-          required: false
           schema:
             type: string
             format: date
         - in: query
           name: page
           description: Page number
-          required: false
           schema:
             type: integer
             default: 1
         - in: query
           name: pageSize
           description: Number of items per page
-          required: false
           schema:
             type: integer
             default: 50
       responses:
-        200:
+        '200':
           description: The list of filtered books
           content:
             application/json:
@@ -68,9 +63,9 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Book'
+                $ref: '#/components/schemas/CrupdateBook'
       responses:
-        200:
+        '200':
           description: The list of created or updated books
           content:
             application/json:
@@ -89,25 +84,22 @@ paths:
         - in: query
           name: page
           description: Page number
-          required: false
           schema:
             type: integer
             default: 1
         - in: query
           name: pageSize
           description: Number of items per page
-          required: false
           schema:
             type: integer
             default: 50
         - in: query
           name: topicName
           description: Filter topics by name
-          required: false
           schema:
             type: string
       responses:
-        200:
+        '200':
           description: The list of filtered topics with pagination
           content:
             application/json:
@@ -126,7 +118,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Topic'
       responses:
-        200:
+        '200':
           description: The topic has been created or updated
           content:
             application/json:
@@ -142,11 +134,10 @@ paths:
         - in: path
           name: topicId
           description: ID of the topic to delete
-          required: true
           schema:
-            $ref: '#/components/schemas/Topic'
+            type: integer
       responses:
-        200:
+        '200':
           description: The topic has been deleted
           content:
             application/json:
@@ -164,23 +155,23 @@ paths:
         - in: query
           name: authorId
           description: Filter by author ID
-          required: false
           schema:
             type: string
         - in: query
           name: authorName
           description: Filter by author name
-          required: false
           schema:
             type: string
         - in: query
           name: authorSex
           description: Filter by author sex (M or F)
-          required: false
           schema:
-            $ref: '#/components/schemas/Sex'
+            type: string
+            enum:
+              - M
+              - F
       responses:
-        200:
+        '200':
           description: The list of AuthorTopics
           content:
             application/json:
@@ -199,11 +190,10 @@ paths:
         - in: query
           name: authorName
           description: Filter authors by name
-          required: false
           schema:
             type: string
       responses:
-        200:
+        '200':
           description: The list of [filtered] authors
           content:
             application/json:
@@ -224,7 +214,7 @@ paths:
               items:
                 $ref: '#/components/schemas/Author'
       responses:
-        200:
+        '200':
           description: The author has been created or updated
           content:
             application/json:
@@ -255,14 +245,5 @@ paths:
             type: integer
             default: 50
       responses:
-        200:
-          description: The list of [filtered] authors with pagination
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Author'
-  '/authors/delete/{authorId}':
-    delete:
-      summary:
+        '200':
+          description: The list of [filtered
