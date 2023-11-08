@@ -123,6 +123,9 @@ paths:
           required: true
           schema:
             type: string
+      responses:
+        200:
+          description: Successful deletion
 
   /books/{bookId}/authors/{authorId}:
     put:
@@ -187,3 +190,4 @@ components:
           enum:
             - M
             - F
+
