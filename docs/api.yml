@@ -5,6 +5,7 @@ info:
   description: STD22092
 servers:
   - url: https://library.com
+
 paths:
   /books:
     get:
@@ -100,17 +101,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Author'
+  /authors/{authorId}:
     delete:
-      summary: Delete an author
-      description: Delete an author by ID.
+      summary: Supprimer un auteur
+      description: Supprimer un auteur par ID.
       operationId: deleteAuthor
       parameters:
         - in: path
           name: authorId
-          description: ID of the author to delete
+          description: ID de l'auteur à supprimer
           required: true
           schema:
             type: string
+      responses:
+        '204':
+          description: L'auteur a été supprimé avec succès
+        '404':
+          description: L'auteur n'a pas été trouvé
+
 components:
   schemas:
     Book:
@@ -121,7 +129,7 @@ components:
         bookName:
           type: string
         author:
-          $ref: '#/components/schemas/Author'  
+          $ref: '#/components/schemas/Author'
         pageNumbers:
           type: integer
         topic:
