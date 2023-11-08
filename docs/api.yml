@@ -1,16 +1,16 @@
 openapi: 3.0.3
 info:
   title: Library API
-  version: 1.0.0  
-  description: STD22092  
+  version: 1.0.0
+  description: STD22092
 servers:
   - url: https://library.com
-  paths:
+
+paths:
   /books:
     get:
       summary: Get all books
       description: The returned books are ordered by updated datetime.
-      operationId: getBooks
       parameters:
         - in: query
           name: bookName
@@ -55,16 +55,16 @@ servers:
                 type: array
                 items:
                   $ref: '#/components/schemas/Book'
+
     put:
       summary: Create or update a list of books
-      operationId: crupdateBooks
       requestBody:
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/CrupdateBook'
+                $ref: '#/components/schemas/Book'
       responses:
         200:
           description: The list of created or updated books
@@ -74,6 +74,56 @@ servers:
                 type: array
                 items:
                   $ref: '#/components/schemas/Book'
+
+  /authors:
+    get:
+      summary: Get all authors
+      description: Get a list of all authors.
+      operationId: getAuthors
+      responses:
+        200:
+          description: The list of authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
+
+  /books/authors:
+    put:
+      summary: Attach Authors to Books
+      description: Attach multiple Authors to multiple Books by specifying their IDs.
+      operationId: attachAuthorsToBooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Author'
+      responses:
+        200:
+          description: The updated books with attached authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+
+    delete:
+      summary: Delete an author
+      description: Delete an author by ID.
+      operationId: deleteAuthor
+      parameters:
+        - in: path
+          name: authorId
+          description: ID of the author to delete
+          required: true
+          schema:
+            type: string
+
   /books/{bookId}/authors/{authorId}:
     put:
       summary: Attach an Author to a Book
@@ -92,25 +142,48 @@ servers:
           required: true
           schema:
             type: string
-  /books/authors:
-    put:
-      summary: Attach Authors to Books
-      description: Attach multiple Authors to multiple Books by specifying their IDs.
-      operationId: attachAuthorsToBooks
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/UpdateBookAuthor'
       responses:
         200:
-          description: The updated books with attached authors
+          description: The list of authors
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Book'
+                  $ref: '#/components/schemas/Author'
 
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+        bookName:
+          type: string
+        author:
+          $ref: '#/components/schemas/Author'
+        pageNumbers:
+          type: integer
+        topic:
+          type: string
+          enum:
+            - ROMANCE
+            - COMEDY
+            - OTHER
+        releaseDate:
+          type: string
+          format: date
+
+    Author:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        sex:
+          type: string
+          enum:
+            - M
+            - F
