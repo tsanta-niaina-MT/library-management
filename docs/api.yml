@@ -6,6 +6,7 @@ info:
 servers:
  - url: https://library.com
 
+
 paths:
  /books:
    get:
@@ -142,6 +143,77 @@ components:
 
   
   schemas:
+    Author:
+      type: object
+      properties:
+        bookName:
+          type: string
+        author:
+          type: string
+        pageNumbers:
+          type: integer
+        topic:
+          type: string
+        releaseDate:
+          type: string
+          format: date
+        idAuthor:
+          type: string
+      required:
+        - bookName
+        - author
+        - pageNumbers
+        - topic
+        - releaseDate
+        - idAuthor
+
+    AuthorImport:
+      type: object
+      properties:
+        bookName:
+          type: string
+        author:
+          type: string
+        pageNumbers:
+          type: integer
+        topic:
+          type: string
+        releaseDate:
+          type: string
+          format: date
+        idAuthor:
+          type: string
+      required:
+        - bookName
+        - author
+        - pageNumbers
+        - topic
+        - releaseDate
+        - idAuthor
+
+    BookImport:
+      type: object
+      properties:
+        bookName:
+          type: string
+        author:
+          type: string
+        pageNumbers:
+          type: integer
+        topic:
+          type: string
+        releaseDate:
+          type: string
+          format: date
+        idAuthor:
+          type: string
+      required:
+        - bookName
+        - author
+        - pageNumbers
+        - topic
+        - releaseDate
+        - idAuthor
 
     Book:
      type: object
