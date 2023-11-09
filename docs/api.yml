@@ -23,6 +23,12 @@ paths:
                type: array
                items:
                 $ref: '#/components/schemas/Book'
+       400:
+        $ref: '#/components/responses/BadRequest'
+       403:
+        $ref: '#/components/responses/Forbidden'
+       500:
+        $ref: '#/components/responses/InternalServerError'
 
    put:
      summary: Create or update a list of books
@@ -42,63 +48,102 @@ paths:
                type: array
                items:
                 $ref: '#/components/schemas/Book'
-
- /authors:
-   get:
-     summary: Get all authors
-     description: Retrieve a list of all authors.
-     parameters:
-       - $ref: '#/components/parameters/queryPagination'
-       - $ref: '#/components/parameters/pageSize'
-     responses:
-       200:
-         description: The list of authors
-         content:
-           application/json:
-             schema:
-               type: array
-               items:
-                $ref: '#/components/schemas/Author'
-                
+       400:
+        $ref: '#/components/responses/BadRequest'
+       403:
+        $ref: '#/components/responses/Forbidden'
+       500:
+        $ref: '#/components/responses/InternalServerError'
+         
 components:
+  parameters:
+    pageSize:
+      name: pageSize
+      in: query
+      description: The number of items per page 
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 50
+
+    queryPagination:
+      name: page
+      in: query
+      description: The page number for pagination 
+      schema:
+        type: integer
+        default: 1
 
   responses:
-   DefaultResponse:
-     description: Une réponse par défaut
-     content:
-       application/json:
-         schema:
-           type: object
-           properties:
-             status:
-               type: object
-               properties:
-                code:
-                  type: integer
-                message:
-                  type: string
-             body:
-               type: object
-               additionalProperties: true
+    InternalServerError:
+      description: Erreur interne du serveur
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+              body:
+                type: object
+                additionalProperties: true
+                properties:
+                  error:
+                    type: string
 
-  parameters:
-   queryPagination:
-     name: page
-     in: query
-     description: The page number for pagination 
-     schema:
-       type: integer
-       default: 1
-   pageSize:
-     name: pageSize
-     in: query
-     description: The number of items per page 
-     schema:
-       type: integer
-       default: 50
+    Forbidden:
+      description: Accès interdit
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+              body:
+                type: object
+                additionalProperties: true
+                properties:
+                  error:
+                    type: string
 
+    BadRequest:
+      description: Mauvaise requête
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+              body:
+                type: object
+                additionalProperties: true
+                properties:
+                  error:
+                    type: string
+
+
+  
   schemas:
-   Book:
+
+    Book:
      type: object
      properties:
        title:
@@ -107,32 +152,15 @@ components:
          type: string
        publication_year:
          type: integer
+       Crupdatebook:
+          type: string
      required:
        - title
        - author
        - publication_year
-
-   CrupdateBook:
+       - Crupdatebook
+    CrupdateBook:
      type: object
      properties:
        title:
          type: string
-       author:
-         type: string
-       publication_year:
-         type: integer
-     required:
-       - title
-       - author
-       - publication_year
-
-   Author:
-     type: object
-     properties:
-       name:
-         type: string
-       nationality:
-         type: string
-     required:
-       - name
-       - nationality
