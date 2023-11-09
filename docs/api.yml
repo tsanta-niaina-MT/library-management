@@ -1,88 +1,118 @@
 openapi: 3.0.3
 info:
-  title: Library API
-  version: 1.0.0
-  description: STD22092
+ title: Library API
+ version: 1.0.0
+ description: STD22092
 servers:
-  - url: https://library.com
+ - url: https://library.com
 
 paths:
-  /books:
-    get:
-      summary: Get all books
-      description: Retrieve a list of all books.
-      parameters:
-        - in: query
-          name: page
-          description: The page number for pagination (default: 1)
-          schema:
-            type: integer
-            default: 1
-        - in: query
-          name: pageSize
-          description: The number of items per page (default: 50)
-          schema:
-            type: integer
-            default: 50
-      responses:
-        200:
-          description: The list of books
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Book'
+ /books:
+   get:
+     summary: Get all books
+     description: Retrieve a list of all books.
+     parameters:
+       - $ref: '#/components/parameters/queryPagination'
+       - $ref: '#/components/parameters/pageSize'
+     responses:
+       200:
+         description: The list of books
+         content:
+           application/json:
+             schema:
+               type: array
+               items:
+                $ref: '#/components/schemas/Book'
 
-    put:
-      summary: Create or update a list of books
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/CrupdateBook'
-      responses:
-        200:
-          description: The list of created or updated books
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Book'
+   put:
+     summary: Create or update a list of books
+     requestBody:
+       content:
+         application/json:
+           schema:
+             type: array
+             items:
+               $ref: '#/components/schemas/CrupdateBook'
+     responses:
+       200:
+         description: The list of created or updated books
+         content:
+           application/json:
+             schema:
+               type: array
+               items:
+                $ref: '#/components/schemas/Book'
 
-  /authors:
-    get:
-      summary: Get all authors
-      description: Retrieve a list of all authors.
-      parameters:
-        - in: query
-          name: page
-          description: The page number for pagination (default: 1)
-          schema:
-            type: integer
-            default: 1
-        - in: query
-          name: pageSize
-          description: The number of items per page (default: 50)
-          schema:
-            type: integer
-            default: 50
-      responses:
-        200:
-          description: The list of authors
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Author'
- 
-#2-b-i"UpdateBookAuthor" ne contient que les identifiants car il viseprincipalement à associer un livre à un auteur existant.
-#2-b-ii"UpdateBookAuthor" devrait inclure les propriétés de "CrupdateBook" et "Author" lorsque des modifications supplémentaires des livres ou des auteurs sont nécessaires lors de la mise à jour.               
-                  
-#4-a Oui, on peut gérer la pagination à travers les en-têtes de la requête.
+ /authors:
+   get:
+     summary: Get all authors
+     description: Retrieve a list of all authors.
+     parameters:
+       - $ref: '#/components/parameters/queryPagination'
+       - $ref: '#/components/parameters/pageSize'
+     responses:
+       200:
+         description: The list of authors
+         content:
+           application/json:
+             schema:
+               type: array
+               items:
+                $ref: '#/components/schemas/Author'
+                
+components:
+ parameters:
+   queryPagination:
+     name: page
+     in: query
+     description: The page number for pagination 
+     schema:
+       type: integer
+       default: 1
+   pageSize:
+     name: pageSize
+     in: query
+     description: The number of items per page 
+     schema:
+       type: integer
+       default: 50
 
-#4-b Si votre application suit des conventions RESTful et que vous souhaitez des URL plus propres et plus lisibles, alors l'utilisation des en-têtes de la requête peut être recommandée. Cependant, cela dépend du contexte et des besoins spécifiques de votre application.
+ schemas:
+   Book:
+     type: object
+     properties:
+       title:
+         type: string
+       author:
+         type: string
+       publication_year:
+         type: integer
+     required:
+       - title
+       - author
+       - publication_year
+
+   CrupdateBook:
+     type: object
+     properties:
+       title:
+         type: string
+       author:
+         type: string
+       publication_year:
+         type: integer
+     required:
+       - title
+       - author
+       - publication_year
+
+   Author:
+     type: object
+     properties:
+       name:
+         type: string
+       nationality:
+         type: string
+     required:
+       - name
+       - nationality
