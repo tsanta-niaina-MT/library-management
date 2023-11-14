@@ -9,6 +9,7 @@ servers:
 
 paths:
  /books:
+ 
    get:
      summary: Get all books
      description: Retrieve a list of all books.
@@ -55,7 +56,47 @@ paths:
         $ref: '#/components/responses/Forbidden'
        500:
         $ref: '#/components/responses/InternalServerError'
-         
+
+/books/{bookId}/borrow:
+ post:
+   summary: Borrow a book
+   requestBody:
+     - name: visitorId
+       in: query
+       required: true
+       schema:
+         type: string
+         $ref: '#/components/schemas/BorrowBook'
+   responses:
+     200:
+       description: The book was successfully borrowed
+     400:
+       $ref: '#/components/responses/BadRequest'
+     403:
+       $ref: '#/components/responses/Forbidden'
+     500:
+       $ref: '#/components/responses/InternalServerError'
+
+
+/books/{bookId}/return:
+ put:
+   summary: Return a book
+   parameters:
+     - name: bookId
+       in: path
+       required: true
+       schema:
+         type: string
+   responses:
+     200:
+       description: The book was successfully returned
+     400:
+       $ref: '#/components/responses/BadRequest'
+     403:
+       $ref: '#/components/responses/Forbidden'
+     500:
+       $ref: '#/components/responses/InternalServerError'
+     
 components:
   parameters:
     pageSize:
