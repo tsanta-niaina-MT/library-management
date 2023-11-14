@@ -181,6 +181,16 @@ components:
                   error:
                     type: string
   schemas:
+    BorrowBook:
+     type: object
+     properties:
+       bookId:
+         type: string
+       visitorId:
+         type: string
+     required:
+       - bookId
+       - visitorId
     Visitor:
       type: object
       properties:
